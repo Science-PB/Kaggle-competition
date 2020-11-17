@@ -54,15 +54,13 @@ The final model created was a simple logistic regression model for a simple bina
 The optimal parameters for this particular logistic regression problem were a C value of about 19307, indicating that there was very low regularization and an L2 penalty. The L2 penalty is also known as the Ridge Regression and its loss function is simply a squared magnitude of the coefficient. L1, or Lasso, Regression alternatively adds the absolute value of magnitude of the coefficient as the penalty term in the loss function. This ultimately eliminates some features, which is extraordinarily beneficial for datasets with a very large number of features. The equation for the L1 loss function can be seen in Figure 6 on page 6. 
 
 
-
-
-
+<img width="505" alt="Screen Shot 2020-11-17 at 2 34 02 AM" src="https://user-images.githubusercontent.com/66921930/99359889-bd7c6000-287d-11eb-8a97-0ac3eaa46d1a.png">
 
 
 The logistic regression model was then created with the established parameters, and subsequently run and tested with the Santander training data. The code snippet outlining this process can be seen below in Figure 7. 
 
 
-
+<img width="752" alt="Screen Shot 2020-11-17 at 2 34 27 AM" src="https://user-images.githubusercontent.com/66921930/99359890-be14f680-287d-11eb-8929-b2c5ac4466f2.png">
 
 
 
@@ -72,7 +70,8 @@ While logistic regression ultimately output the best model based on the accuracy
 
 
 
-
+<img width="552" alt="Screen Shot 2020-11-17 at 2 35 12 AM" src="https://user-images.githubusercontent.com/66921930/99359893-bead8d00-287d-11eb-917f-ec96178345c6.png">
+<img width="529" alt="Screen Shot 2020-11-17 at 2 35 18 AM" src="https://user-images.githubusercontent.com/66921930/99359894-bead8d00-287d-11eb-88bf-e2836afed544.png">
 
 
 
@@ -81,6 +80,37 @@ While gradient boosting did see an increase in the false positive rate, up to 0.
 
 
 
+<img width="604" alt="Screen Shot 2020-11-17 at 2 36 09 AM" src="https://user-images.githubusercontent.com/66921930/99359897-bead8d00-287d-11eb-98f9-b78d785f46e1.png">
 
 
+Figure 10 shows the confusion matrix for the logistic regression model. Again, there was an increase in the false positive rate, this time it was over one percent at 1.35%. However, it did boast the highest overall accuracy overall at 91.10%, which is the highest of all the models. Because of its continuously low false positive rate and the fact that it has the highest overall accuracy, logistic regression can be considered the optimal model for this particular solution. 
+Once decided, the logistic regression model was applied to the original Santander test data set of 30,000 rows, and it found that there were 0 instances of transactions. No final accuracy could be determined, but when compared with other results from the Kaggle competition, it was findings were similar to the contest winners, which was intriguing anecdotal confirmation of the model’s ability to predict transactions. 
 
+# Conclusion
+It is not always easy to determine the best model for a given problem and dataset when first presented with a project. While things like a distribution and the type of predictions being made can immediately eliminate a good proportion of models, it is not always straightforward to find the best one of the remaining models. Often times, it takes multiple iterations of multiple model types in order to determine the best model. 
+
+Even with all the interesting machine learning models that are continuously being developed and re-developed, a classic logistic regression for a binary classification problem is still often times the most robust and accurate option. 
+
+If this project was to be continued, and more processing power was available, the gradient boosting and KNN models would have been tuned a bit more, which could have made them more accurate than the logistic regression model. As it stands though, logistic regression was the most accurate and was ultimately deemed the optimal model.
+
+
+# References
+Agresti, A. (2015). Foundations of linear and generalized linear models. ProQuest Ebook Central https://ebookcentral.proquest.com
+
+Maklin, Cory. (July 2019). K Nearest Neighbor Algorithm In Python. Towards Data Science. Retrieved from https://towardsdatascience.com/k-nearest-neighbor-python-2fccc47d2a55 
+
+Santander Customer Transaction Prediction. (Feb 2019). Kaggle [Data set]. Retrieved from https://www.kaggle.com/c/santander-customer-transaction-prediction/overview 
+
+Sklearn.ensemble.GradientBoostingClassifier. (n.d.). SciKit Learn. Retrieved from https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html#sklearn.ensemble.GradientBoostingClassifier 
+
+Sklearn.linear_model.LogisticRegression. (n.d.). SciKit Learn. Retrieved from https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.predict_log_proba 
+
+Sklearn.neighbors.KNeighborsClassifier. (n.d.). SciKit Learn. Retrieved from https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html#sklearn.neighbors.KNeighborsClassifier 
+
+StatQuest with Josh Starmer. (8 April 2019). Gradient Boost Part 3: Classification [Video]. YouTube. https://www.youtube.com/watch?v=jxuNLH5dXCs 
+
+StatQuest with Josh Starmer. (22 April 2019). Gradient Boost Part 4: Classification Details [Video]. YouTube. https://www.youtube.com/watch?v=StWY5QWMXCw 
+
+Vanderplas, Jake. (n.d.). “1.6 Nearest Neighbors.” SciKit Learn. Retrieved from https://scikit-learn.org/stable/modules/neighbors.html 
+
+1.11 Ensemble Methods. (2020). SciKit Learn. Retrieved from https://scikit-learn.org/stable/modules/ensemble.html#gradient-tree-boosting 

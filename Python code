@@ -1,0 +1,220 @@
+# Importing libraries
+import pandas as pd
+import numpy as np
+import scikitplot as skplt
+from scipy import misc
+import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+import seaborn as sns
+
+#Training data
+data_train = pd.read_csv(r"/Users/boris/Downloads/Santander_train.csv")
+data_train.head()
+
+# Training data details 
+data_train.shape
+
+# Assign feature variable for training dataset
+X = data_train.iloc[:30000,2:202]
+
+# Assign target variable for training dataset
+y = data_train.iloc[:30000,1]
+X.shape
+
+# Searching for any missing data
+def missing_data(data):
+    total = data.isnull().sum()
+    percent = (data.isnull().sum()/data.isnull().count()*100)
+    tt = pd.concat([total, percent], axis=1, keys=['Total', 'Percent'])
+    types = []
+    for col in data.columns:
+        dtype = str(data[col].dtype)
+        types.append(dtype)
+    tt['Types'] = types
+    return(np.transpose(tt))
+
+missing_data(data_train)
+
+
+
+# Show count of observations
+sns.countplot(data_train["target"], palette="Set3")
+
+
+print("There are {}% target values with 1".format(100 * data_train["target"].value_counts()[1]/data_train.shape[0]))
+
+
+######### k-NN 1 neighbor #########
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42, stratify=y)
+# Create a k-NN classifier with 1 neighbor
+knn = KNeighborsClassifier(n_neighbors=1)
+# Fit the classifier to the training data
+knn.fit(X_train,y_train)
+# Predict on the test data
+y_pred = knn.predict(X_test)
+print("k-NN with 1 neighbor:", metrics.accuracy_score(y_test,y_pred))
+
+
+######### k-NN 5 neighbors #########
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=41, stratify=y)
+# Create a k-NN classifier with 5 neighbor
+knn_5 = KNeighborsClassifier(n_neighbors=5)
+# Fit the classifier to the training data
+knn_5.fit(X_train,y_train)
+# Predict on the test data
+y_predd = knn_5.predict(X_test)
+print("k-NN with 5 neighbor:", metrics.accuracy_score(y_test,y_predd))
+
+
+######### k-NN 11 neighbors #########
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=40, stratify=y)
+# Create a k-NN classifier with 11 neighbor
+knn_11 = KNeighborsClassifier(n_neighbors=11)
+# Fit the classifier to the training data
+knn_11.fit(X_train,y_train)
+# Predict on the test data
+y_preddd = knn_11.predict(X_test)
+print("k-NN with 11 neighbor:", metrics.accuracy_score(y_test,y_preddd))
+
+
+# Compute 5-fold cross-validation scores: cv_scores
+cv_scores = cross_val_score(knn_11,X,y, cv=5)
+
+# Print the 5-fold cross-validation scores
+print(cv_scores)
+
+print("Average 5-Fold CV Score: {}".format(np.mean(cv_scores)))
+
+
+# Creating confusion matrix
+skplt.metrics.plot_confusion_matrix(
+    y_test,
+    y_preddd,
+    figsize=(12,12))
+    
+    
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=39, stratify=y)
+# Create a k-NN classifier with 21 neighbor
+knn_21 = KNeighborsClassifier(n_neighbors=21)
+# Fit the classifier to the training data
+knn_21.fit(X_train,y_train)
+# Predict on the test data
+y_predddd = knn_21.predict(X_test)
+print("k-NN with 21 neighbor:", metrics.accuracy_score(y_test,y_predddd))
+
+
+# Create the hyperparameter grid
+c_space = np.logspace(-5, 8, 15)
+param_gridd = {"C": c_space, "penalty": ['l1', 'l2']}
+# Instantiate the logistic regression classifier: logreg
+logreg = LogisticRegression()
+# Instantiate the GridSearchCV object: logreg_cv
+logreg_cv = GridSearchCV(logreg,param_gridd,cv=5)
+# Fit it to the training data
+logreg_cv.fit(X_train,y_train)
+
+
+# Print the optimal parameters
+print("Tuned Logistic Regression Parameter: {}".format(logreg_cv.best_params_))
+
+
+
+######### Logistic Regression #########
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=32, stratify=y)
+# Create a Logistic Regression classifier 
+lg = LogisticRegression(C=19306.977288832535, penalty="l2")
+# Fit the classifier to the training data
+lg.fit(X_train,y_train)
+# Predict on the test data
+y_preddddd = lg.predict(X_test)
+print("Logistic Regression accuracy:", metrics.accuracy_score(y_test,y_preddddd))
+
+
+print("Logistic Regression accuracy:", metrics.accuracy_score(y_test,y_preddddd))
+
+
+# Creating confusion matrix
+skplt.metrics.plot_confusion_matrix(
+    y_test,
+    y_preddddd,
+    figsize=(12,12))
+    
+    
+    
+# Compute 5-fold cross-validation scores: cv_scoress
+cv_scoress = cross_val_score(lg,X,y, cv=5)
+
+# Print the 5-fold cross-validation scores
+print(cv_scoress)
+
+
+# Print the 5-fold cross-validation scores
+print(cv_scoress)
+print("Average 5-Fold CV Score: {}".format(np.mean(cv_scoress)))
+
+
+########### Gradient Boosting Classifier ############# 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=38, stratify=y)
+gb = GradientBoostingClassifier()
+gb.fit(X_train,y_train)
+gb_pred = gb.predict(X_test)
+print("Gradient Boosting accuracy:", metrics.accuracy_score(y_test,gb_pred))
+
+
+# Creating confusion matrix
+skplt.metrics.plot_confusion_matrix(
+    y_test,
+    gb_pred,
+    figsize=(12,12))
+    
+    
+ Compute 5-fold cross-validation scores: cv_scoresss
+cv_scoresss = cross_val_score(gb,X,y, cv=5)
+
+# Print the 5-fold cross-validation scores
+print(cv_scoresss)
+
+print("Average 5-Fold CV Score: {}".format(np.mean(cv_scoresss)))
+
+
+
+data_test = pd.read_csv(r"/Users/boris/Downloads/Santander_test.csv")
+data_test.head()
+
+
+data_test.shape
+
+
+# Searching for any missing data
+missing_data(data_test)
+
+
+# Assign feature varible for test dataset
+X1_test = data_test.iloc[:30000,1:201]
+X1_test.head(3)
+
+
+
+######### Logistic Regression for test data ############
+# Create a Logistic Regression classifier 
+lg_1 = LogisticRegression(C=19306.977288832535, penalty="l2")
+# Fit the classifier to the training data
+lg_1.fit(X,y)
+# Predict on the test data
+y_pred_lg_1 = lg_1.predict(X1_test)
+
+
+print(y_pred_lg_1[0:25])
